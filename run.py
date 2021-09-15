@@ -27,20 +27,20 @@ def get_sales_data():
         print("Example: 10,20,30,40,50,60 \n")
 
         data_str = input("Enter your data here: ")
-        
+      
         sales_data = data_str.split(",")
 
         if validate_data(sales_data):
             print("Data is valid")
             break
-    
+ 
     return sales_data
 
 
 def validate_data(values):
     """
-    Inside the try, converts all string values into integers. 
-    Raises ValueError if cannot be converted 
+    Inside the try, converts all string values into integers.
+    Raises ValueError if cannot be converted
     or if there aren't exactly 6 values.
     """
     try:
@@ -51,18 +51,18 @@ def validate_data(values):
         print(f"Invalid data: {e}, please try again.\n")
         return False
         # returning the value to be used in other funcs
- 
+
     return True
 
 
-def update_sales_worksheet(data):
+def update_worksheet(data, worksheet):
     """
-    Update sales worksheet, add new row with the list provided.
+    Update worksheet, add new row with the list provided.
     """
-    print("Updating sales worksheet... \n")
-    sales_worksheet = SHEET.worksheet("sales")
-    sales_worksheet.append_row(data)
-    print("Sales worksheet updated successfully.\n")
+    print(f"Updating {worksheet} worksheet... \n")
+    worksheet_to_update = SHEET.worksheet(worksheet)
+    worksheet_to_update.append_row(data)
+    print(f"{worksheet} worksheet updated successfully.\n")
 
 
 def calculate_surplus_data(sales_row):
@@ -77,18 +77,20 @@ def calculate_surplus_data(sales_row):
     for stock, sales in zip(stock_row, sales_row):
         surplus = int(stock) - sales
         surplus_data.append(surplus)
-    
+
     return surplus_data
 
 
 def main():
     """
-    Run all program function
+    Run all program functions
     """
     data = get_sales_data()
     sales_data = [int(num) for num in data] # list comprehension
-    update_sales_worksheet(sales_data)
+    update_worksheet(sales_data, "sales")
     new_surplus_data = calculate_surplus_data(sales_data)
+    print(new_surplus_data)
+    update_worksheet(new_surplus_data, "surplus")
 
 
 print("Welcome to Love Sambos Data Automation")
