@@ -27,13 +27,12 @@ def get_sales_data():
         print("Example: 10,20,30,40,50,60 \n")
 
         data_str = input("Enter your data here: ")
-      
         sales_data = data_str.split(",")
 
         if validate_data(sales_data):
             print("Data is valid")
             break
- 
+
     return sales_data
 
 
@@ -50,7 +49,7 @@ def validate_data(values):
     except ValueError as e:
         print(f"Invalid data: {e}, please try again.\n")
         return False
-        # returning the value to be used in other funcs
+          # returning the value to be used in other funcs
 
     return True
 
@@ -81,6 +80,21 @@ def calculate_surplus_data(sales_row):
     return surplus_data
 
 
+def get_last_5_entries_sales():
+    """
+    Collect columns
+    """
+    sales = SHEET.worksheet("sales")
+    # column = sales.col_values(3) # google col values start at 1
+
+    columns = []
+    for ind in range(1, 7):
+        column = sales.col_values(ind)
+        columns.append(column[-5:])
+    
+    return columns
+
+
 def main():
     """
     Run all program functions
@@ -89,9 +103,10 @@ def main():
     sales_data = [int(num) for num in data] # list comprehension
     update_worksheet(sales_data, "sales")
     new_surplus_data = calculate_surplus_data(sales_data)
-    print(new_surplus_data)
     update_worksheet(new_surplus_data, "surplus")
+    
 
 
 print("Welcome to Love Sambos Data Automation")
 main()
+sales_columns = get_last_5_entries_sales()
